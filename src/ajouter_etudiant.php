@@ -1,20 +1,18 @@
 <?php
-global $pdo;
-require 'db.php';
+require_once __DIR__ . '/functions_etudiant.php';
 
-
-// todo : Récupérez les valeurs d'un étudiant,
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nom = trim($_POST['nom']);
-    $courriel = trim($_POST['courriel']);
+    $nom = $_POST['nom'] ?? null;
+    $courriel = $_POST['courriel'] ?? null;
 
-    if (!empty($nom) && !empty($courriel)) {
-        $stmt = $pdo->prepare("INSERT INTO etudiant (nom, courriel) VALUES (:nom, :courriel)");
-        $stmt->execute([
-            ':nom' => $nom,
-            ':courriel' => $courriel
-        ]);
+    $erreurs = validerEtudiant($nom, $courriel);
+
+    if (empty($erreurs)) {
+        ajouterEtudiant(trim($nom), trim($courriel));
+        header("Location: etudiants.php");
+        exit;
     }
 }
 
 header("Location: etudiants.php");
+exit;

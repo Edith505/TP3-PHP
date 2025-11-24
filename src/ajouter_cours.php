@@ -1,19 +1,18 @@
 <?php
-global $pdo;
-require 'db.php';
+require_once __DIR__ . '/functions_cours.php';
 
-// todo : Récupérez les valeurs du cours,
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $numero_cours = trim($_POST['cours']);
-    $titre = trim($_POST['titre_cours']);
+    $numero_cours = $_POST['numero_cours'] ?? null;
+    $titre = $_POST['titre'] ?? null;
 
-    if (!empty($numero_cours) && !empty($titre)) {
-        $stmt = $pdo->prepare("INSERT INTO cours (numero_cours, titre) VALUES (:numero_cours, :titre)");
-        $stmt->execute([
-            ':numero_cours' => $numero_cours,
-            ':titre' => $titre
-        ]);
+    $erreurs = validerCours($numero_cours, $titre);
+
+    if (empty($erreurs)) {
+        ajouterCours(trim($numero_cours), trim($titre));
+        header("Location: cours.php");
+        exit;
     }
 }
 
 header("Location: cours.php");
+exit;

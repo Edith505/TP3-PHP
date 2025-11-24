@@ -1,11 +1,10 @@
 <?php
-require 'db.php';
-// todo : récupérez le id d'un etudiant
-$id = $_GET['id'] ?? null;
+require_once __DIR__ . '/functions_etudiant.php';
 
+$id = $_GET['id'] ?? null;
 if ($id) {
-    $stmt = $pdo->prepare("DELETE FROM etudiant WHERE id = :id");
-    $stmt->execute([':id' => $id]);
+    supprimerEtudiant((int)$id);
 }
 
 header("Location: etudiants.php");
+exit;

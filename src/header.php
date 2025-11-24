@@ -3,13 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Gestion des cours et étudiants</title>
-    <style>
-        body { font-family: Arial; margin:20px; }
-        nav a { margin-right: 15px; }
-        table { border-collapse: collapse; width:700px; margin-top:20px; }
-        th, td { border:1px solid #ccc; padding:6px; }
-        th { background:#eee; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <nav>

@@ -1,0 +1,37 @@
+body {
+    font-family: Arial;
+    margin: 20px;
+}
+
+nav a {
+    margin-right: 15px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 700px;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 6px;
+}
+
+th {
+    background: #eee;
+}
+
+.error {
+    color: red;
+    margin: 10px 0;
+}
+
+form {
+    margin: 20px 0;
+}
+
+input, select {
+    margin: 5px;
+    padding: 5px;
+}

@@ -1,56 +1,44 @@
-<?php global $pdo;
-include 'header.php'; ?>
-<?php require 'db.php'; ?>
-
 <?php
-error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE);
-ini_set('display_errors', 1);
+require_once __DIR__ . '/functions_cours.php';
+include 'header.php';
 
-// Récupérer le cours à modifier
-$id = isset($_GET['id']) ? $_GET['id'] : null;
+$id = $_GET['id'] ?? null;
 if (!$id) {
     header("Location: cours.php");
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $numero_cours = trim($_POST['numero_cours']);
-    $titre = trim($_POST['titre']); // Nom du champ dans ce formulaire
-
-    if (!empty($numero_cours) && !empty($titre)) {
-        try {
-            $stmt = $pdo->prepare("UPDATE cours SET numero_cours = :numero_cours, titre = :titre WHERE id = :id");
-            $stmt->execute([
-                ':numero_cours' => $numero_cours,
-                ':titre' => $titre,
-                ':id' => $id
-            ]);
-            // Redirection après succès (PRG)
-            header("Location: cours.php");
-            exit;
-        } catch (PDOException $e) {
-            // Gérer les erreurs (e.g. numéro de cours déjà utilisé)
-            $erreur = "Erreur lors de la mise à jour: Le numéro de cours est peut-être déjà utilisé.";
-        }
-    } else {
-        $erreur = "Tous les champs sont requis.";
-    }
-}
-
-$stmt = $pdo->prepare("SELECT * FROM cours WHERE id = :id");
-$stmt->execute([':id' => $id]);
-$cours = $stmt->fetch();
-
+$cours = getUnCours((int)$id);
 if (!$cours) {
     header("Location: cours.php");
     exit;
 }
+
+$erreurs = [];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $numero_cours = $_POST['numero_cours'] ?? null;
+    $titre = $_POST['titre'] ?? null;
+
+    $erreurs = validerCours($numero_cours, $titre);
+
+    if (empty($erreurs)) {
+        modifierCours((int)$id, trim($numero_cours), trim($titre));
+        header("Location: cours.php");
+        exit;
+    }
+}
 ?>
 
     <h2>Modifier un cours</h2>
-<?php if (isset($erreur)): ?>
-    <p style="color: red;"><?= htmlspecialchars($erreur) ?></p>
+
+<?php if (!empty($erreurs)): ?>
+    <div class="error">
+        <?php foreach ($erreurs as $erreur): ?>
+            <p><?= htmlspecialchars($erreur) ?></p>
+        <?php endforeach; ?>
+    </div>
 <?php endif; ?>
+
     <form method="post">
         <input type="text" name="numero_cours" value="<?= htmlspecialchars($cours['numero_cours']) ?>"
                placeholder="999-999" pattern="\d{3}-\d{3}" required>
@@ -59,24 +47,5 @@ if (!$cours) {
         <input type="submit" value="Modifier">
         <a href="cours.php">Annuler</a>
     </form>
-
-<?php
-if ($_POST) {
-    $numero_cours = trim($_POST['numero_cours']);
-    $titre = trim($_POST['titre']);
-
-    if (!empty($numero_cours) && !empty($titre)) {
-        $stmt = $pdo->prepare("UPDATE cours SET numero_cours = :numero_cours, titre = :titre WHERE id = :id");
-        $stmt->execute([
-            ':numero_cours' => $numero_cours,
-            ':titre' => $titre,
-            ':id' => $id
-        ]);
-    }
-
-    header("Location: cours.php");
-    exit;
-}
-?>
 
 <?php include 'footer.php'; ?>

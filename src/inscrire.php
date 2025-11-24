@@ -1,29 +1,23 @@
 <?php
-global $pdo;
-require 'db.php';
+require_once __DIR__ . '/functions_inscription.php';
 
-// todo : préparez la requête d'insertion puis exécutez-la
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_etudiant = isset($_POST['etudiant']) ? $_POST['etudiant'] : null;
-    $id_cours = isset($_POST['cours']) ? $_POST['cours'] : null;
-    $session = isset($_POST['session']) ? $_POST['session'] : null;
-    $annee = isset($_POST['annee']) ? $_POST['annee'] : null;
-    $note = !empty($_POST['note']) ? $_POST['note'] : null;
+    $id_etudiant = $_POST['etudiant'] ?? null;
+    $id_cours = $_POST['cours'] ?? null;
+    $session = $_POST['session'] ?? null;
+    $annee = $_POST['annee'] ?? null;
+    $noteStr = $_POST['note'] ?? null;
 
-    if ($id_etudiant && $id_cours && $session && $annee) {
-        $stmt = $pdo->prepare("
-                INSERT INTO inscription (id_etudiant, id_cours, session, annee, note) 
-                VALUES (:id_etudiant, :id_cours, :session, :annee, :note)
-            ");
-        $stmt->execute([
-            ':id_etudiant' => $id_etudiant,
-            ':id_cours' => $id_cours,
-            ':session' => $session,
-            ':annee' => $annee,
-            ':note' => $note
-        ]);
+    [$erreurs, $note] = validerInscription($id_etudiant, $id_cours, $session, $annee, $noteStr);
+
+    if (empty($erreurs)) {
+        try {
+            ajouterInscription($pdo, (int)$id_etudiant, (int)$id_cours, $session, (int)$annee, $note);
+        } catch (PDOException $e) {
+            // Inscription existe déjà
+        }
     }
 }
 
-
 header("Location: inscriptions.php");
+exit;
