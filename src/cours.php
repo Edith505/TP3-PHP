@@ -7,6 +7,9 @@
 
 
         <!-- todo : compléter le formulaire Cours-->
+    <input type="text" id="cours" name="cours" placeholder="999-999">
+    <input type="text" id="titre_cours" name="titre_cours" placeholder="Nom">
+    <input type="submit" value="Ajouter">
 
 </form>
 
@@ -16,6 +19,17 @@
     ?>
 
     <!-- todo : affichez la liste des cours dans un tableau-->
-
+<table>
+    <tr>
+        <th>Numéro</th>
+        <th>Titre</th>
+        <th>Actions</th>
+    </tr>
+    <tr>
+        <td><!--On ajoute ici le Numéro du cours--></td>
+        <td><!--On ajoute ici le titre du cours --></td>
+        <td><!--Bouttons :  modifier | Supprimer --></td>
+    </tr>
+</table>
 
     <?php include 'footer.php'; ?>
