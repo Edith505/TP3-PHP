@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($erreurs)) {
         try {
-            ajouterInscription($pdo, (int)$id_etudiant, (int)$id_cours, $session, (int)$annee, $note);
+            ajouterInscription((int)$id_etudiant, (int)$id_cours, $session, (int)$annee, $note);
         } catch (PDOException $e) {
             // Inscription existe déjà
         }
