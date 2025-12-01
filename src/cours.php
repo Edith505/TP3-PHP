@@ -27,13 +27,13 @@ unset($_SESSION['erreurs'], $_SESSION['old_data']);
             <label for="numero_cours" class="form-label visually-hidden">Numéro</label>
             <input type="text" id="numero_cours" name="numero_cours" 
                    placeholder="999-999" class="form-control" 
-                   value="<?= htmlspecialchars($old_data['numero_cours'] ?? '') ?>>
+                   value="<?= htmlspecialchars($old_data['numero_cours'] ?? '') ?>" required>
         </div>
         <div class="col-md-6">
             <label for="titre" class="form-label visually-hidden">Titre</label>
             <input type="text" id="titre" name="titre" 
                    placeholder="Titre du cours" class="form-control" 
-                   value="<?= htmlspecialchars($old_data['titre'] ?? '') ?>">
+                   value="<?= htmlspecialchars($old_data['titre'] ?? '') ?>" required>
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary">Ajouter</button>
