@@ -3,35 +3,55 @@ require_once __DIR__ . '/functions_cours.php';
 include 'header.php';
 ?>
 
-    <h2>Cours</h2>
+<div class="container my-4">
+    <h2 class="mb-4">Cours</h2>
 
-    <form method="post" action="ajouter_cours.php">
-        <input type="text" id="numero_cours" name="numero_cours" placeholder="999-999">
-        <input type="text" id="titre" name="titre" placeholder="Titre du cours">
-        <input type="submit" value="Ajouter">
+    <form method="post" action="ajouter_cours.php" class="row g-3 align-items-end mb-4">
+        <div class="col-md-4">
+            <label for="numero_cours" class="form-label visually-hidden">Numéro</label>
+            <input type="text" id="numero_cours" name="numero_cours" placeholder="999-999" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+            <label for="titre" class="form-label visually-hidden">Titre</label>
+            <input type="text" id="titre" name="titre" placeholder="Titre du cours" class="form-control" required>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+        </div>
     </form>
 
-<?php
-$cours_list = getCours();
-?>
+    <?php
+    $cours_list = getCours();
+    ?>
 
-    <table>
-        <tr>
-            <th>Numéro</th>
-            <th>Titre</th>
-            <th>Actions</th>
-        </tr>
-        <?php foreach ($cours_list as $cours): ?>
-            <tr>
-                <td><?= htmlspecialchars($cours['numero_cours']) ?></td>
-                <td><?= htmlspecialchars($cours['titre']) ?></td>
-                <td>
-                    <a href="modifier_cours.php?id=<?= $cours['id'] ?>">Modifier</a> |
-                    <a href="supprimer_cours.php?id=<?= $cours['id'] ?>"
-                       onclick="return confirm('Êtes-vous sûr?')">Supprimer</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+    <?php if (empty($cours_list)): ?>
+        <div class="alert alert-info">Aucun cours trouvé.</div>
+    <?php else: ?>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Numéro</th>
+                        <th>Titre</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($cours_list as $cours): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($cours['numero_cours']) ?></td>
+                        <td><?= htmlspecialchars($cours['titre']) ?></td>
+                        <td class="text-end">
+                            <a href="modifier_cours.php?id=<?= urlencode($cours['id']) ?>" class="btn btn-sm btn-outline-success me-2">Modifier</a>
+                            <a href="supprimer_cours.php?id=<?= urlencode($cours['id']) ?>"
+                               onclick="return confirm('Êtes-vous sûr?')" class="btn btn-sm btn-outline-danger">Supprimer</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</div>
 
 <?php include 'footer.php'; ?>

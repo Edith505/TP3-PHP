@@ -1,6 +1,10 @@
 <?php include 'header.php'; ?>
 
-<h2>Bienvenue dans la gestion des cours et étudiants</h2>
-<p>Utilisez le menu pour naviguer.</p>
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-3">
+    <h2 class="display-6">Bienvenue dans la gestion des cours et étudiants</h2>
+    <a href="etudiants.php" class="btn btn-primary">Gérer les étudiants</a>
+  </div>
+</div>
 
 <?php include 'footer.php'; ?>

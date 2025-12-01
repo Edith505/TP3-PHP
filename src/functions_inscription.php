@@ -10,7 +10,7 @@ function creerTableInscriptions(): void
         id_cours INT,
         session ENUM('AUT','HIV','ETE') NOT NULL,
         annee INT NOT NULL,
-        note DECIMAL(5,2) DEFAULT NULL,
+        note VARCHAR(5) DEFAULT NULL,
         PRIMARY KEY (id_etudiant, id_cours),
         FOREIGN KEY (id_etudiant) REFERENCES etudiant(id) ON DELETE CASCADE,
         FOREIGN KEY (id_cours) REFERENCES cours(id) ON DELETE CASCADE
@@ -109,14 +109,10 @@ function validerInscription(?string $id_etudiant, ?string $id_cours, ?string $se
 
     $note = null;
     if ($noteStr !== null && $noteStr !== '') {
-        if (!is_numeric($noteStr)) {
-            $erreurs[] = "La note doit être un nombre.";
-        } else {
             $note = (float)$noteStr;
             if ($note < 0 || $note > 100) {
                 $erreurs[] = "La note doit être entre 0 et 100.";
             }
-        }
     }
 
     return [$erreurs, $note];
