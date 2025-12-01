@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/functions_etudiant.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -11,6 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ajouterEtudiant(trim($nom), trim($courriel));
         header("Location: etudiants.php");
         exit;
+    } else {
+        $_SESSION['erreurs'] = $erreurs;
+        $_SESSION['old_data'] = $_POST;
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
+session_start();
 require_once __DIR__ . '/functions_etudiant.php';
-include 'header.php';
 
 $id = $_GET['id'] ?? null;
 if (!$id) {
@@ -23,29 +23,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($erreurs)) {
         modifierEtudiant((int)$id, trim($nom), trim($courriel));
+        $_SESSION['success'] = "Étudiant modifié avec succès.";
         header("Location: etudiants.php");
         exit;
     }
+    // Si erreurs, on garde les valeurs saisies
+    $etudiant['nom'] = $nom;
+    $etudiant['courriel'] = $courriel;
 }
+
+include 'header.php';
 ?>
 
-    <h2>Modifier étudiant</h2>
+<div class="container my-4">
+    <h2 class="mb-4">Modifier étudiant</h2>
 
-<?php if (!empty($erreurs)): ?>
-    <div class="error">
-        <?php foreach ($erreurs as $erreur): ?>
-            <p><?= htmlspecialchars($erreur) ?></p>
-        <?php endforeach; ?>
-    </div>
-<?php endif; ?>
+    <?php if (!empty($erreurs)): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Erreur(s) :</strong>
+            <ul class="mb-0">
+                <?php foreach ($erreurs as $erreur): ?>
+                    <li><?= htmlspecialchars($erreur) ?></li>
+                <?php endforeach; ?>
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
 
-    <form method="post">
-        <input type="text" name="nom" value="<?= htmlspecialchars($etudiant['nom']) ?>"
-               placeholder="Nom" required>
-        <input type="email" name="courriel" value="<?= htmlspecialchars($etudiant['courriel']) ?>"
-               placeholder="Courriel" required>
-        <input type="submit" value="Modifier">
-        <a href="etudiants.php">Annuler</a>
+    <form method="post" class="row g-3">
+        <div class="col-md-6">
+            <label for="nom" class="form-label">Nom</label>
+            <input type="text" id="nom" name="nom" 
+                   value="<?= htmlspecialchars($etudiant['nom']) ?>"
+                   placeholder="Nom" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+            <label for="courriel" class="form-label">Courriel</label>
+            <input type="email" id="courriel" name="courriel" 
+                   value="<?= htmlspecialchars($etudiant['courriel']) ?>"
+                   placeholder="Courriel" class="form-control" required>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Modifier</button>
+            <a href="etudiants.php" class="btn btn-secondary">Annuler</a>
+        </div>
     </form>
+</div>
 
 <?php include 'footer.php'; ?>

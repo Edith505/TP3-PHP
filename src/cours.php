@@ -1,19 +1,39 @@
 <?php
+session_start();
 require_once __DIR__ . '/functions_cours.php';
 include 'header.php';
+
+$erreurs = $_SESSION['erreurs'] ?? [];
+$old_data = $_SESSION['old_data'] ?? [];
+unset($_SESSION['erreurs'], $_SESSION['old_data']);
 ?>
 
 <div class="container my-4">
     <h2 class="mb-4">Cours</h2>
 
+    <?php if (!empty($erreurs)): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul class="mb-0">
+                <?php foreach ($erreurs as $erreur): ?>
+                    <li><?= htmlspecialchars($erreur) ?></li>
+                <?php endforeach; ?>
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
     <form method="post" action="ajouter_cours.php" class="row g-3 align-items-end mb-4">
         <div class="col-md-4">
             <label for="numero_cours" class="form-label visually-hidden">Numéro</label>
-            <input type="text" id="numero_cours" name="numero_cours" placeholder="999-999" class="form-control" required>
+            <input type="text" id="numero_cours" name="numero_cours" 
+                   placeholder="999-999" class="form-control" 
+                   value="<?= htmlspecialchars($old_data['numero_cours'] ?? '') ?>>
         </div>
         <div class="col-md-6">
             <label for="titre" class="form-label visually-hidden">Titre</label>
-            <input type="text" id="titre" name="titre" placeholder="Titre du cours" class="form-control" required>
+            <input type="text" id="titre" name="titre" 
+                   placeholder="Titre du cours" class="form-control" 
+                   value="<?= htmlspecialchars($old_data['titre'] ?? '') ?>">
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary">Ajouter</button>

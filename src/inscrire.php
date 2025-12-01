@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/functions_inscription.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -14,8 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             ajouterInscription((int)$id_etudiant, (int)$id_cours, $session, (int)$annee, $note);
         } catch (PDOException $e) {
-            // Inscription existe déjà
+            $_SESSION['erreurs'] = ["Cette inscription existe déjà."];
+            $_SESSION['old_data'] = $_POST;
         }
+    } else {
+        $_SESSION['erreurs'] = $erreurs;
+        $_SESSION['old_data'] = $_POST;
     }
 }
 

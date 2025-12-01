@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/functions_cours.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -11,6 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ajouterCours(trim($numero_cours), trim($titre));
         header("Location: cours.php");
         exit;
+    } else {
+        $_SESSION['erreurs'] = $erreurs;
+        $_SESSION['old_data'] = $_POST;
     }
 }
 

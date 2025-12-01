@@ -109,10 +109,20 @@ function validerInscription(?string $id_etudiant, ?string $id_cours, ?string $se
 
     $note = null;
     if ($noteStr !== null && $noteStr !== '') {
+        // Nettoyer la note : enlever les espaces et le symbole %
+        $noteStr = trim($noteStr);
+        $noteStr = str_replace('%', '', $noteStr);
+        $noteStr = trim($noteStr);
+        
+        // Vérifier le format avec regex : nombre avec 2 décimales
+        if (!preg_match('/^\d+\.\d{2}$/', $noteStr)) {
+            $erreurs[] = "La note doit être au format 80.00 ou 80.50 (avec 2 décimales).";
+        } else {
             $note = (float)$noteStr;
             if ($note < 0 || $note > 100) {
-                $erreurs[] = "La note doit être entre 0 et 100.";
+                $erreurs[] = "La note doit être entre 0.00 et 100.00.";
             }
+        }
     }
 
     return [$erreurs, $note];
