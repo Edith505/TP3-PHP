@@ -104,7 +104,11 @@ function validerInscription(?string $id_etudiant, ?string $id_cours, ?string $se
         $erreurs[] = "La session est obligatoire.";
     }
     if ($annee === null || $annee === '') {
-        $erreurs[] = "L'année est obligatoire.";
+    $erreurs[] = "L'année est obligatoire.";
+    } elseif (!preg_match('/^\d{4}$/', $annee)) {
+        $erreurs[] = "L'année doit être au format 2025 (4 chiffres).";
+    } elseif ((int)$annee < 1900 || (int)$annee > 2100) {
+        $erreurs[] = "L'année doit être entre 1900 et 2100.";
     }
 
     $note = null;
@@ -114,13 +118,13 @@ function validerInscription(?string $id_etudiant, ?string $id_cours, ?string $se
         $noteStr = str_replace('%', '', $noteStr);
         $noteStr = trim($noteStr);
         
-        // Vérifier le format avec regex : nombre avec 2 décimales
-        if (!preg_match('/^\d+\.\d{2}$/', $noteStr)) {
-            $erreurs[] = "La note doit être au format 80.00 ou 80.50 (avec 2 décimales).";
+        // Vérifier si c'est un nombre valide
+        if (!is_numeric($noteStr)) {
+            $erreurs[] = "La note doit être un nombre valide.";
         } else {
             $note = (float)$noteStr;
             if ($note < 0 || $note > 100) {
-                $erreurs[] = "La note doit être entre 0.00 et 100.00.";
+                $erreurs[] = "La note doit être entre 0 et 100.";
             }
         }
     }

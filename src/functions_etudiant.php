@@ -57,13 +57,22 @@ function supprimerEtudiant(int $id): void
 function validerEtudiant(?string $nom, ?string $courriel): array
 {
     $erreurs = [];
+    
+    // Validation du nom
     if ($nom === null || trim($nom) === '') {
         $erreurs[] = "Le nom est obligatoire.";
+    } elseif (strlen(trim($nom)) < 3) {
+        $erreurs[] = "Le nom doit contenir au moins 3 caractères.";
+    } elseif (preg_match('/\d/', $nom)) {
+        $erreurs[] = "Le nom ne doit pas contenir de chiffres.";
     }
+    
+    // Validation du courriel
     if ($courriel === null || trim($courriel) === '') {
         $erreurs[] = "Le courriel est obligatoire.";
-    } elseif (!filter_var($courriel, FILTER_VALIDATE_EMAIL)) {
-        $erreurs[] = "Le courriel n'est pas valide.";
+    } elseif (!preg_match('/^[^\s@]+@[^\s@]+\.[^\s@]+$/', $courriel)) {
+        $erreurs[] = "Le courriel doit être dans le format nom@domaine.com";
     }
+    
     return $erreurs;
 }

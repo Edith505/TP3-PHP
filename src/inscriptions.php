@@ -72,7 +72,7 @@ unset($_SESSION['erreurs'], $_SESSION['old_data']);
         <div class="col-md-2">
             <label for="note" class="form-label visually-hidden">Note</label>
             <input type="text" name="note" id="note" class="form-control" 
-                   placeholder="Note" pattern="\d+\.\d{2}" 
+                   placeholder="Note" 
                    value="<?= htmlspecialchars($old_data['note'] ?? '') ?>">
         </div>
 
